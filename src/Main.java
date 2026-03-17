@@ -1,31 +1,27 @@
-import java.util.HashMap;
 
 /**
- * RoomInventory - Centralized room inventory management system
- * Maintains single source of truth for room availability
+ * RoomSearchService - Provides read-only access to room inventory
+ * Filters and displays available rooms without modifying inventory
  */
-public class RoomInventory {
-    private HashMap<String, Integer> inventory;
+public class RoomSearchService {
+    private RoomInventory inventory;
 
-    public RoomInventory() {
-        inventory = new HashMap<>();
-        inventory.put("Single Room", 10);
-        inventory.put("Double Room", 8);
-        inventory.put("Suite Room", 5);
+    public RoomSearchService(RoomInventory inventory) {
+        this.inventory = inventory;
     }
 
-    public int getAvailability(String roomType) {
-        return inventory.getOrDefault(roomType, 0);
-    }
+    public void displayAvailableRooms() {
+        String[] roomTypes = {"Single Room", "Double Room", "Suite Room"};
+        double[] prices = {100.0, 150.0, 300.0};
 
-    public void updateAvailability(String roomType, int count) {
-        inventory.put(roomType, count);
-    }
-
-    public void displayInventory() {
-        System.out.println("=== Room Inventory ===");
-        for (String roomType : inventory.keySet()) {
-            System.out.println(roomType + ": " + inventory.get(roomType) + " available");
+        for (int i = 0; i < roomTypes.length; i++) {
+            int availability = inventory.getAvailability(roomTypes[i]);
+            if (availability > 0) {
+                System.out.println("Room Type: " + roomTypes[i]);
+                System.out.println("Price: $" + prices[i]);
+                System.out.println("Available: " + availability);
+                System.out.println();
+            }
         }
     }
 }
