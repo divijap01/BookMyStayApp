@@ -1,27 +1,17 @@
+public class Reservation {
+    private String guestName;
+    private String roomType;
 
-/**
- * RoomSearchService - Provides read-only access to room inventory
- * Filters and displays available rooms without modifying inventory
- */
-public class RoomSearchService {
-    private RoomInventory inventory;
-
-    public RoomSearchService(RoomInventory inventory) {
-        this.inventory = inventory;
+    public Reservation(String guestName, String roomType) {
+        this.guestName = guestName;
+        this.roomType = roomType;
     }
 
-    public void displayAvailableRooms() {
-        String[] roomTypes = {"Single Room", "Double Room", "Suite Room"};
-        double[] prices = {100.0, 150.0, 300.0};
+    public String getGuestName() {
+        return guestName;
+    }
 
-        for (int i = 0; i < roomTypes.length; i++) {
-            int availability = inventory.getAvailability(roomTypes[i]);
-            if (availability > 0) {
-                System.out.println("Room Type: " + roomTypes[i]);
-                System.out.println("Price: $" + prices[i]);
-                System.out.println("Available: " + availability);
-                System.out.println();
-            }
-        }
+    public String getRoomType() {
+        return roomType;
     }
 }
