@@ -1,17 +1,36 @@
-public class Reservation {
-    private String guestName;
-    private String roomType;
+import java.util.*;
 
-    public Reservation(String guestName, String roomType) {
-        this.guestName = guestName;
-        this.roomType = roomType;
+public class RoomAllocationService {
+
+    private Set<String> allocatedRoomIds;
+    private Map<String, Set<String>> assignedRoomsByType;
+
+    public RoomAllocationService() {
+        allocatedRoomIds = new HashSet<>();
+        assignedRoomsByType = new HashMap<>();
     }
 
-    public String getGuestName() {
-        return guestName;
+    public void allocateRoom(Reservation reservation, RoomInventory inventory) {
+        String type = reservation.getRoomType();
+
+        if (inventory.isAvailable(type)) {
+            String roomId = generateRoomId(type);
+
+            allocatedRoomIds.add(roomId);
+
+            assignedRoomsByType.putIfAbsent(type, new HashSet<>());
+            assignedRoomsByType.get(type).add(roomId);
+
+            inventory.decrementInventory(type);
+            reservation.confirm(roomId);
+        }
     }
 
-    public String getRoomType() {
-        return roomType;
+    private String generateRoomId(String roomType) {
+        String newId;
+        do {
+            newId = roomType.toUpperCase().substring(0, 3) + "-" + (int)(Math.random() * 1000);
+        } while (allocatedRoomIds.contains(newId));
+        return newId;
     }
 }
